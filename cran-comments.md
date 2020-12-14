@@ -1,37 +1,34 @@
+## bomrang version 0.7.3
 
 ## Test environments
 
-- local macOS install R version 3.6.2 (2019-12-12)
+- local macOS install R version 4.0.3 (2020-10-10)
 
-- Manjaro Linux 3.6.2 (2019-12-12)
+- win-builder R Under development (unstable) (2020-11-27 r79522)
 
-- win-builder R Under development (unstable) (2020-01-07 r77633)
-
-- win-builder R version 3.6.2 (2019-12-12)
+- win-builder R version  4.0.3 (2020-10-10)
 
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
 
-This is a new major release that fixes the issues with the CRAN checks as
-requested and fixes other minor bugs and provides new functionality.
-
-I am very sorry about the previous submission that still caused failing checks.
-I trust that I've been able to correctly identify and fix the problems with the
-previous version in this one.
+This is a new patch release that fixes a bug in data retrieval and enhances other functionality
 
 ## Bug fixes
 
-* Adds `skip_on_cran()` to all tests causing failures in CRAN checks that
-should not have been tested on CRAN
+* `get_current_weather()` now returns the correct values for `rel_hum`, rather than returning a column of `NA`
 
-* Corrects (and skips) a test that failed on Solaris and macOS when writing to
-disk by using `tempdir()` rather than the userspace
+* `get_available_imagery()` now fails properly if a non-numeric `radar_id` is supplied
 
-## Major changes
+## Minor changes
 
-* Requires R >= 3.5.0 now due to changes in serialisation of internal .Rds files
-used to store databases of station information
+* Switch GIS raster file support from `raster` to `terra`
+
+* `radar_id` values in `get_available_radar()` are now provided as a numeric value.
+This previously was a character that was internally coerced to numeric
+
+* `get_radar_imagery()` now returns a `magick-image` object rather than a `raster` object.
+The files are .gif natively, this is a better way to handle them
 
 ## Reverse dependencies
 

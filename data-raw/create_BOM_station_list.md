@@ -8,43 +8,43 @@ file), start, end, elevation, etc.
 
 Refer to these BOM pages for more reference:
 
-  - <http://www.bom.gov.au/inside/itb/dm/idcodes/struc.shtml>
+-   <http://www.bom.gov.au/inside/itb/dm/idcodes/struc.shtml>
 
-  - <http://reg.bom.gov.au/catalogue/data-feeds.shtml>
+-   <http://reg.bom.gov.au/catalogue/data-feeds.shtml>
 
-  - <http://reg.bom.gov.au/catalogue/anon-ftp.shtml>
+-   <http://reg.bom.gov.au/catalogue/anon-ftp.shtml>
 
-  - <http://www.bom.gov.au/climate/cdo/about/site-num.shtml>
+-   <http://www.bom.gov.au/climate/cdo/about/site-num.shtml>
 
 ## Product code definitions
 
 ### States
 
-  - IDD - NT
+-   IDD - NT
 
-  - IDN - NSW/ACT
+-   IDN - NSW/ACT
 
-  - IDQ - Qld
+-   IDQ - Qld
 
-  - IDS - SA
+-   IDS - SA
 
-  - IDT - Tas/Antarctica (distinguished by the product number)
+-   IDT - Tas/Antarctica (distinguished by the product number)
 
-  - IDV - Vic
+-   IDV - Vic
 
-  - IDW - WA
+-   IDW - WA
 
 ### Product code numbers
 
-  - 60701 - coastal observations (duplicated in 60801)
+-   60701 - coastal observations (duplicated in 60801)
 
-  - 60801 - State weather observations excluding Canberra
+-   60801 - State weather observations excluding Canberra
 
-  - 60803 - Antarctica weather observations
+-   60803 - Antarctica weather observations
 
-  - 60901 - capital city weather observations (duplicated in 60801)
+-   60901 - capital city weather observations (duplicated in 60801)
 
-  - 60903 - Canberra area weather observations
+-   60903 - Canberra area weather observations
 
 ## Get station metadata
 
@@ -113,7 +113,7 @@ bom_stations_raw <- bom_stations_raw[1:nrows, ]
 
 # add current year to stations that are still active
 bom_stations_raw["end"][is.na(bom_stations_raw["end"])] <- 
-    as.integer(format(Sys.Date(), "%Y"))
+    as.double(format(Sys.Date(), "%Y"))
 
 # keep only currently reporting stations
 bom_stations_raw <- 
@@ -124,24 +124,29 @@ bom_stations_raw <-
 str(bom_stations_raw)
 ```
 
-    ## Classes 'tbl_df', 'tbl' and 'data.frame':    7073 obs. of  11 variables:
-    ##  $ site  : chr  "001006" "001007" "001010" "001013" ...
-    ##  $ dist  : chr  "01" "01" "01" "01" ...
-    ##  $ name  : chr  "WYNDHAM AERO" "TROUGHTON ISLAND" "THEDA" "WYNDHAM" ...
-    ##  $ start : int  1951 1956 1965 1968 1998 1973 1997 1944 1967 1986 ...
-    ##  $ end   : int  2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
-    ##  $ lat   : num  -15.5 -13.8 -14.8 -15.5 -15.9 ...
-    ##  $ lon   : num  128 126 126 128 128 ...
-    ##  $ state : chr  "WA" "WA" "WA" "WA" ...
-    ##  $ elev  : num  3.8 6 210 11 130 546 23 51 90 300 ...
-    ##  $ bar_ht: num  4.3 8 NA NA NA 547 24 52.5 NA NA ...
-    ##  $ wmo   : num  95214 94102 NA NA NA ...
+    ## tibble [6,842 × 11] (S3: tbl_df/tbl/data.frame)
+    ##  $ site  : chr [1:6842] "001006" "001007" "001010" "001013" ...
+    ##  $ dist  : chr [1:6842] "01" "01" "01" "01" ...
+    ##  $ name  : chr [1:6842] "WYNDHAM AERO" "TROUGHTON ISLAND" "THEDA" "WYNDHAM" ...
+    ##  $ start : int [1:6842] 1951 1956 1965 1968 1998 1973 1997 1944 1967 1986 ...
+    ##  $ end   : int [1:6842] 2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
+    ##  $ lat   : num [1:6842] -15.5 -13.8 -14.8 -15.5 -15.9 ...
+    ##  $ lon   : num [1:6842] 128 126 126 128 128 ...
+    ##  $ state : chr [1:6842] "WA" "WA" "WA" "WA" ...
+    ##  $ elev  : num [1:6842] 3.8 6 210 11 130 546 23 51 90 300 ...
+    ##  $ bar_ht: num [1:6842] 4.3 8 NA NA NA 547 24 52.5 NA NA ...
+    ##  $ wmo   : num [1:6842] 95214 94102 NA NA NA ...
+    ##  - attr(*, "problems")= tibble [15 × 4] (S3: tbl_df/tbl/data.frame)
+    ##   ..$ row     : int [1:15] 19386 19386 19387 19387 19387 19387 19387 19387 19388 19388 ...
+    ##   ..$ col     : int [1:15] 3 NA 4 5 6 7 8 NA 4 5 ...
+    ##   ..$ expected: chr [1:15] "0 chars" "12 columns" "a double" "a double" ...
+    ##   ..$ actual  : chr [1:15] "0" "3 columns" "teor" "y (A" ...
 
 ``` r
 bom_stations_raw
 ```
 
-    ## # A tibble: 7,073 x 11
+    ## # A tibble: 6,842 x 11
     ##    site   dist  name            start   end   lat   lon state  elev bar_ht   wmo
     ##    <chr>  <chr> <chr>           <int> <int> <dbl> <dbl> <chr> <dbl>  <dbl> <dbl>
     ##  1 001006 01    WYNDHAM AERO     1951  2020 -15.5  128. WA      3.8    4.3 95214
@@ -154,7 +159,7 @@ bom_stations_raw
     ##  8 001020 01    TRUSCOTT         1944  2020 -14.1  126. WA     51     52.5 95101
     ##  9 001023 01    EL QUESTRO       1967  2020 -16.0  128. WA     90     NA      NA
     ## 10 001024 01    ELLENBRAE        1986  2020 -16.0  127. WA    300     NA      NA
-    ## # … with 7,063 more rows
+    ## # … with 6,832 more rows
 
 ## Check station locations
 
@@ -163,17 +168,18 @@ Alice Springs Airport in SA. Perform quality check to ensure that the
 station locations are accurate based on the lat/lon values.
 
 ``` r
-library(ASGS.foyer)
-library(data.table)
-
-`%notin%` <- function(x, table) {
+`%notin%`  <- function(x, table) {
   # Same as !(x %in% table)
   match(x, table, nomatch = 0L) == 0L
 }
 
 data.table::setDT(bom_stations_raw)
 latlon2state <- function(lat, lon) {
-  ASGS.foyer::latlon2SA(lat, lon, to = "STE", yr = "2016", return = "v")
+  ASGS.foyer::latlon2SA(lat,
+                        lon,
+                        to = "STE",
+                        yr = "2016",
+                        return = "v")
 }
 
 bom_stations_raw %>%
@@ -205,21 +211,19 @@ BOM rather than the sometimes incorrect `state` column from BOM.
 
 BOM state codes are as follows:
 
-  - IDD - NT,
+-   IDD - NT,
 
-  - IDN - NSW/ACT,
+-   IDN - NSW/ACT,
 
-  - IDQ - Qld,
+-   IDQ - Qld,
 
-  - IDS - SA,
+-   IDS - SA,
 
-  - IDT - Tas/Antarctica,
+-   IDT - Tas/Antarctica,
 
-  - IDV - Vic, and
+-   IDV - Vic, and
 
-  - IDW - WA
-
-<!-- end list -->
+-   IDW - WA
 
 ``` r
 bom_stations_raw$state_code <- NA
@@ -228,7 +232,8 @@ bom_stations_raw$state_code[bom_stations_raw$state == "QLD"] <- "Q"
 bom_stations_raw$state_code[bom_stations_raw$state == "VIC"] <- "V"
 bom_stations_raw$state_code[bom_stations_raw$state == "NT"] <- "D"
 bom_stations_raw$state_code[bom_stations_raw$state == "TAS" |
-                              bom_stations_raw$state == "ANT"] <- "T"
+                              bom_stations_raw$state == "ANT"] <-
+  "T"
 bom_stations_raw$state_code[bom_stations_raw$state == "NSW"] <- "N"
 bom_stations_raw$state_code[bom_stations_raw$state == "SA"] <- "S"
 ```
@@ -239,54 +244,54 @@ bom_stations_raw$state_code[bom_stations_raw$state == "SA"] <- "S"
 stations_site_list <-
   bom_stations_raw %>%
   dplyr::select(site:wmo, state, state_code) %>%
-  tidyr::drop_na(wmo) %>% 
+  tidyr::drop_na(wmo) %>%
   dplyr::mutate(
-  url = dplyr::case_when(
-    .$state == "NSW" |
-      .$state == "NT" |
-      .$state == "QLD" |
-      .$state == "SA" |
-      .$state == "TAS" |
-      .$state == "VIC" |
-      .$state == "WA" ~
-      paste0(
-        "http://www.bom.gov.au/fwo/ID",
-        .$state_code,
-        "60801",
-        "/",
-        "ID",
-        .$state_code,
-        "60801",
-        ".",
-        .$wmo,
-        ".json"
-      ),
-    .$state == "ACT" ~
-      paste0(
-        "http://www.bom.gov.au/fwo/IDN",
-        "60903",
-        "/",
-        "IDN",
-        "60903",
-        ".",
-        .$wmo,
-        ".json"
-      ),
-    .$state == "ANT" ~
-      paste0(
-        "http://www.bom.gov.au/fwo/ID",
-        .$state_code,
-        "60803",
-        "/",
-        "ID",
-        .$state_code,
-        "60803",
-        ".",
-        .$wmo,
-        ".json"
-      )
+    url = dplyr::case_when(
+      .$state == "NSW" |
+        .$state == "NT" |
+        .$state == "QLD" |
+        .$state == "SA" |
+        .$state == "TAS" |
+        .$state == "VIC" |
+        .$state == "WA" ~
+        paste0(
+          "http://www.bom.gov.au/fwo/ID",
+          .$state_code,
+          "60801",
+          "/",
+          "ID",
+          .$state_code,
+          "60801",
+          ".",
+          .$wmo,
+          ".json"
+        ),
+      .$state == "ACT" ~
+        paste0(
+          "http://www.bom.gov.au/fwo/IDN",
+          "60903",
+          "/",
+          "IDN",
+          "60903",
+          ".",
+          .$wmo,
+          ".json"
+        ),
+      .$state == "ANT" ~
+        paste0(
+          "http://www.bom.gov.au/fwo/ID",
+          .$state_code,
+          "60803",
+          "/",
+          "ID",
+          .$state_code,
+          "60803",
+          ".",
+          .$wmo,
+          ".json"
+        )
+    )
   )
-)
 ```
 
 ## Save data
@@ -300,7 +305,7 @@ There are weather stations that do have a WMO but don’t report online,
 remove these from the list and then create a database to provide URLs
 for valid JSON files providing weather data from BOM.
 
-### Save JSON URL database for `get_current_weather()` and `get_historical()`
+### Save URL database for get\_current\_weather() and get\_historical\_weather()
 
 ``` r
 JSONurl_site_list <-
@@ -319,19 +324,39 @@ if (!dir.exists("../inst/extdata")) {
   dir.create("../inst/extdata", recursive = TRUE)
 }
 
+str(JSONurl_site_list)
+```
+
+    ## Classes 'data.table' and 'data.frame':   890 obs. of  13 variables:
+    ##  $ site      : chr  "001006" "001007" "001018" "001019" ...
+    ##  $ dist      : chr  "01" "01" "01" "01" ...
+    ##  $ name      : chr  "WYNDHAM AERO" "TROUGHTON ISLAND" "MOUNT ELIZABETH" "KALUMBURU" ...
+    ##  $ start     : int  1951 1956 1973 1997 1944 1988 2012 1944 1897 1971 ...
+    ##  $ end       : int  2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
+    ##  $ lat       : num  -15.5 -13.8 -16.4 -14.3 -14.1 ...
+    ##  $ lon       : num  128 126 126 127 126 ...
+    ##  $ state     : chr  "WA" "WA" "WA" "WA" ...
+    ##  $ elev      : num  3.8 6 546 23 51 ...
+    ##  $ bar_ht    : num  4.3 8 547 24 52.5 ...
+    ##  $ wmo       : num  95214 94102 94211 94100 95101 ...
+    ##  $ state_code: chr  "W" "W" "W" "W" ...
+    ##  $ url       : chr  "http://www.bom.gov.au/fwo/IDW60801/IDW60801.95214.json" "http://www.bom.gov.au/fwo/IDW60801/IDW60801.94102.json" "http://www.bom.gov.au/fwo/IDW60801/IDW60801.94211.json" "http://www.bom.gov.au/fwo/IDW60801/IDW60801.94100.json" ...
+    ##  - attr(*, ".internal.selfref")=<externalptr>
+
+``` r
 # Save database
 save(JSONurl_site_list,
      file = "../inst/extdata/JSONurl_site_list.rda",
      compress = "bzip2")
 ```
 
-### Save station location data for `get_ag_bulletin()`
+### Save station location database for get\_ag\_bulletin()
 
 First, rename columns and drop a few that aren’t necessary for the ag
 bulletin information. Filter for only stations currently reporting
 values. Then pad the `site` field with 0 to match the data in the XML
-file that holds the ag bulletin information. Lastly, create the database
-for use in `bomrang`.
+file that holds the ag bulletin information. Lastly, create the
+databases for use in `bomrang`.
 
 ``` r
 stations_site_list <-
@@ -346,6 +371,25 @@ stations_site_list$site <-
 data.table::setDT(stations_site_list)
 data.table::setkey(stations_site_list, "site")
 
+str(stations_site_list)
+```
+
+    ## Classes 'data.table' and 'data.frame':   890 obs. of  11 variables:
+    ##  $ site  : chr  "10007" "10058" "1006" "1007" ...
+    ##  $ dist  : chr  "10" "10" "01" "01" ...
+    ##  $ name  : chr  "BENCUBBIN" "GOOMALLING" "WYNDHAM AERO" "TROUGHTON ISLAND" ...
+    ##  $ start : int  1912 1887 1951 1956 1892 1903 1877 1973 1997 1944 ...
+    ##  $ end   : int  2020 2020 2020 2020 2020 2020 2020 2020 2020 2020 ...
+    ##  $ lat   : num  -30.8 -31.3 -15.5 -13.8 -31.6 ...
+    ##  $ lon   : num  118 117 128 126 118 ...
+    ##  $ state : chr  "WA" "WA" "WA" "WA" ...
+    ##  $ elev  : num  359 239 3.8 6 250 315 170 546 23 51 ...
+    ##  $ bar_ht: num  353.5 NA 4.3 8 NA ...
+    ##  $ wmo   : num  94632 95631 95214 94102 95603 ...
+    ##  - attr(*, ".internal.selfref")=<externalptr> 
+    ##  - attr(*, "sorted")= chr "site"
+
+``` r
 save(stations_site_list,
      file = "../inst/extdata/current_stations_site_list.rda",
      compress = "bzip2")
@@ -355,62 +399,59 @@ save(stations_site_list,
 
     ## ─ Session info ───────────────────────────────────────────────────────────────
     ##  setting  value                       
-    ##  version  R version 3.6.2 (2019-12-12)
-    ##  os       macOS Catalina 10.15.2      
-    ##  system   x86_64, darwin15.6.0        
+    ##  version  R version 4.0.3 (2020-10-10)
+    ##  os       macOS Catalina 10.15.7      
+    ##  system   x86_64, darwin17.0          
     ##  ui       X11                         
     ##  language (EN)                        
     ##  collate  en_AU.UTF-8                 
     ##  ctype    en_AU.UTF-8                 
     ##  tz       Australia/Brisbane          
-    ##  date     2020-01-20                  
+    ##  date     2020-12-01                  
     ## 
     ## ─ Packages ───────────────────────────────────────────────────────────────────
-    ##  package     * version    date       lib source                             
-    ##  ASGS.foyer  * 0.2.1      2018-05-17 [1] CRAN (R 3.6.0)                     
-    ##  assertthat    0.2.1      2019-03-21 [1] CRAN (R 3.6.0)                     
-    ##  backports     1.1.5      2019-10-02 [1] CRAN (R 3.6.0)                     
-    ##  cli           2.0.1      2020-01-08 [1] CRAN (R 3.6.2)                     
-    ##  clisymbols    1.2.0      2017-05-21 [1] CRAN (R 3.6.0)                     
-    ##  crayon        1.3.4      2017-09-16 [1] CRAN (R 3.6.0)                     
-    ##  curl          4.3        2019-12-02 [1] CRAN (R 3.6.0)                     
-    ##  data.table  * 1.12.8     2019-12-09 [1] CRAN (R 3.6.0)                     
-    ##  digest        0.6.23     2019-11-23 [1] CRAN (R 3.6.0)                     
-    ##  dplyr         0.8.3      2019-07-04 [1] CRAN (R 3.6.0)                     
-    ##  ellipsis      0.3.0      2019-09-20 [1] CRAN (R 3.6.0)                     
-    ##  evaluate      0.14       2019-05-28 [1] CRAN (R 3.6.0)                     
-    ##  fansi         0.4.1      2020-01-08 [1] CRAN (R 3.6.2)                     
-    ##  glue          1.3.1.9000 2020-01-17 [1] Github (tidyverse/glue@8094d3b)    
-    ##  hms           0.5.3      2020-01-08 [1] CRAN (R 3.6.2)                     
-    ##  htmltools     0.4.0      2019-10-04 [1] CRAN (R 3.6.0)                     
-    ##  httr          1.4.1.9000 2020-01-12 [1] Github (hadley/httr@844c8c7)       
-    ##  knitr         1.27       2020-01-16 [1] CRAN (R 3.6.2)                     
-    ##  lattice       0.20-38    2018-11-04 [1] CRAN (R 3.6.2)                     
-    ##  lifecycle     0.1.0      2019-08-01 [1] CRAN (R 3.6.0)                     
-    ##  lubridate     1.7.4      2018-04-11 [1] CRAN (R 3.6.0)                     
-    ##  magrittr    * 1.5        2014-11-22 [1] CRAN (R 3.6.0)                     
-    ##  pillar        1.4.3      2019-12-20 [1] CRAN (R 3.6.0)                     
-    ##  pkgconfig     2.0.3      2019-09-22 [1] CRAN (R 3.6.0)                     
-    ##  prompt        1.0.0      2020-01-12 [1] Github (gaborcsardi/prompt@b332c42)
-    ##  purrr         0.3.3      2019-10-18 [1] CRAN (R 3.6.0)                     
-    ##  R6            2.4.1      2019-11-12 [1] CRAN (R 3.6.0)                     
-    ##  Rcpp          1.0.3      2019-11-08 [1] CRAN (R 3.6.0)                     
-    ##  readr         1.3.1      2018-12-21 [1] CRAN (R 3.6.0)                     
-    ##  rlang         0.4.2      2019-11-23 [1] CRAN (R 3.6.0)                     
-    ##  rmarkdown     2.0        2019-12-12 [1] CRAN (R 3.6.0)                     
-    ##  rstudioapi    0.10       2019-03-19 [1] CRAN (R 3.6.0)                     
-    ##  sessioninfo   1.1.1      2018-11-05 [1] CRAN (R 3.6.0)                     
-    ##  sp          * 1.3-2      2019-11-07 [1] CRAN (R 3.6.0)                     
-    ##  stringi       1.4.5      2020-01-11 [1] CRAN (R 3.6.2)                     
-    ##  stringr       1.4.0      2019-02-10 [1] CRAN (R 3.6.0)                     
-    ##  tibble        2.1.3      2019-06-06 [1] CRAN (R 3.6.0)                     
-    ##  tidyr         1.0.0      2019-09-11 [1] CRAN (R 3.6.0)                     
-    ##  tidyselect    0.2.5      2018-10-11 [1] CRAN (R 3.6.0)                     
-    ##  utf8          1.1.4      2018-05-24 [1] CRAN (R 3.6.0)                     
-    ##  vctrs         0.2.1      2019-12-17 [1] CRAN (R 3.6.0)                     
-    ##  withr         2.1.2      2018-03-15 [1] CRAN (R 3.6.0)                     
-    ##  xfun          0.12       2020-01-13 [1] CRAN (R 3.6.0)                     
-    ##  yaml          2.2.0      2018-07-25 [1] CRAN (R 3.6.0)                     
-    ##  zeallot       0.1.0      2018-01-28 [1] CRAN (R 3.6.0)                     
+    ##  package     * version    date       lib source                              
+    ##  ASGS.foyer    0.2.1      2018-05-17 [1] CRAN (R 4.0.2)                      
+    ##  assertthat    0.2.1      2019-03-21 [1] CRAN (R 4.0.3)                      
+    ##  cli           2.2.0      2020-11-20 [1] CRAN (R 4.0.3)                      
+    ##  crayon        1.3.4.9000 2020-11-15 [1] Github (r-lib/crayon@4bceba8)       
+    ##  curl          4.3        2019-12-02 [1] CRAN (R 4.0.3)                      
+    ##  data.table    1.13.3     2020-11-06 [1] local                               
+    ##  digest        0.6.27     2020-10-24 [1] CRAN (R 4.0.2)                      
+    ##  dplyr         1.0.2      2020-08-18 [1] CRAN (R 4.0.2)                      
+    ##  ellipsis      0.3.1      2020-05-15 [1] CRAN (R 4.0.2)                      
+    ##  evaluate      0.14       2019-05-28 [1] CRAN (R 4.0.3)                      
+    ##  fansi         0.4.1      2020-01-08 [1] CRAN (R 4.0.3)                      
+    ##  generics      0.1.0      2020-10-31 [1] CRAN (R 4.0.2)                      
+    ##  glue          1.4.2      2020-08-27 [1] CRAN (R 4.0.2)                      
+    ##  hms           0.5.3      2020-01-08 [1] CRAN (R 4.0.3)                      
+    ##  htmltools     0.5.0      2020-06-16 [1] CRAN (R 4.0.2)                      
+    ##  httr          1.4.2.9000 2020-11-03 [1] Github (hadley/httr@cb4e20c)        
+    ##  knitr         1.30       2020-09-22 [1] CRAN (R 4.0.2)                      
+    ##  lattice       0.20-41    2020-04-02 [1] CRAN (R 4.0.2)                      
+    ##  lifecycle     0.2.0      2020-03-06 [1] CRAN (R 4.0.3)                      
+    ##  lubridate     1.7.9.9001 2020-11-25 [1] Github (tidyverse/lubridate@6c535c8)
+    ##  magrittr    * 2.0.1      2020-11-17 [1] CRAN (R 4.0.3)                      
+    ##  pillar        1.4.7      2020-11-20 [1] CRAN (R 4.0.3)                      
+    ##  pkgconfig     2.0.3      2019-09-22 [1] CRAN (R 4.0.3)                      
+    ##  purrr         0.3.4      2020-04-17 [1] CRAN (R 4.0.2)                      
+    ##  R6            2.5.0      2020-10-28 [1] CRAN (R 4.0.2)                      
+    ##  Rcpp          1.0.5      2020-07-06 [1] CRAN (R 4.0.2)                      
+    ##  readr         1.4.0      2020-10-05 [1] CRAN (R 4.0.2)                      
+    ##  rlang         0.4.9      2020-11-26 [1] CRAN (R 4.0.3)                      
+    ##  rmarkdown     2.5        2020-10-21 [1] CRAN (R 4.0.3)                      
+    ##  sessioninfo   1.1.1      2018-11-05 [1] CRAN (R 4.0.2)                      
+    ##  sp          * 1.4-4      2020-10-07 [1] CRAN (R 4.0.3)                      
+    ##  stringi       1.5.3      2020-09-09 [1] CRAN (R 4.0.2)                      
+    ##  stringr       1.4.0      2019-02-10 [1] CRAN (R 4.0.3)                      
+    ##  tibble        3.0.4      2020-10-12 [1] CRAN (R 4.0.2)                      
+    ##  tidyr         1.1.2      2020-08-27 [1] CRAN (R 4.0.2)                      
+    ##  tidyselect    1.1.0      2020-05-11 [1] CRAN (R 4.0.2)                      
+    ##  utf8          1.1.4      2018-05-24 [1] CRAN (R 4.0.3)                      
+    ##  vctrs         0.3.5      2020-11-17 [1] CRAN (R 4.0.3)                      
+    ##  withr         2.3.0      2020-09-22 [1] CRAN (R 4.0.2)                      
+    ##  xfun          0.19       2020-10-30 [1] CRAN (R 4.0.2)                      
+    ##  yaml          2.2.1      2020-02-01 [1] CRAN (R 4.0.3)                      
     ## 
-    ## [1] /Library/Frameworks/R.framework/Versions/3.6/Resources/library
+    ## [1] /Users/adamsparks/Library/R/4.0/library
+    ## [2] /Library/Frameworks/R.framework/Versions/4.0/Resources/library

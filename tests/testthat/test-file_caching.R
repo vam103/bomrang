@@ -47,23 +47,23 @@ test_that("caching utils list files in cache and delete when asked", {
   skip_on_cran()
   manage_cache$cache_path_set("foobar", type = "tempdir")
   f <-
-    raster::raster(system.file("external/test.grd", package = "raster"))
+    terra::rast(system.file("external/test.grd", package = "raster"))
   cache_dir <- manage_cache$cache_path_get()
-  raster::writeRaster(f, file.path(cache_dir, "file1.tif"), format = "GTiff")
-  raster::writeRaster(f, file.path(cache_dir, "file2.tif"), format = "GTiff")
-  
+  terra::writeRaster(f, file.path(cache_dir, "file1.tif"), format = "GTiff")
+  terra::writeRaster(f, file.path(cache_dir, "file2.tif"), format = "GTiff")
+
   # test bomrang cache list
   k <- basename(manage_cache$list())
   expect_equal(basename(manage_cache$list()), k)
-  
+
   # file should not exist, expect error
   expect_error(manage_cache$delete("file1.asc"))
-  
+
   # test delete one file
   manage_cache$delete("file1.tif")
   l <- basename(manage_cache$list())
   expect_equal(basename(manage_cache$list()), l)
-  
+
   # test delete all
   manage_cache$delete_all()
   expect_equal(manage_cache$list(),

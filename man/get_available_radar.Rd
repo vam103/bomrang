@@ -7,7 +7,7 @@
 get_available_radar(radar_id = "all")
 }
 \arguments{
-\item{radar_id}{Character. \acronym{BOM} radar \acronym{ID} of interest for
+\item{radar_id}{Numeric. \acronym{BOM} radar \acronym{ID} of interest for
 which a list of available images will be returned.  Defaults to all images
 currently available.}
 }
@@ -27,13 +27,13 @@ Valid \acronym{BOM} \acronym{radar} ID for each location required.
 }
 \examples{
 \donttest{
-# Check availability radar imagey for Wollongong (radar_id = 3)
-imagery <- get_available_radar(radar_id = "3")
+# Check availability radar imagery for Wollongong (radar_id = 3)
+imagery <- get_available_radar(radar_id = 3)
 }
 
 }
 \references{
-Australian Bureau of Meteorology (BOM) radar images 
+Australian Bureau of Meteorology (BOM) radar image
 \url{http://www.bom.gov.au/australia/radar/}
 }
 \author{

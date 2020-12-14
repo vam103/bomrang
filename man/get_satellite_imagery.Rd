@@ -8,7 +8,7 @@ get_satellite_imagery(product_id, scans = 1, cache = FALSE)
 }
 \arguments{
 \item{product_id}{Character.  \acronym{BOM} product ID to download in
-'GeoTIFF' format and import as a \code{\link[raster]{stack}} object.  A
+'GeoTIFF' format and import as a \code{\link[terra]{SpatRaster}} object.  A
 vector of values from \code{\link{get_available_imagery}} may be used here.
 Value is required.}
 
@@ -24,13 +24,13 @@ take advantage of cached files in future sessions, use \code{cache = TRUE}.
 Defaults to \code{FALSE}.  Value is optional.}
 }
 \value{
-A raster stack of GeoTIFF images with layers named by \acronym{BOM} Product
-ID, timestamp and band.
+A \code{SpatRaster} object of GeoTIFF images with layers named by
+\acronym{BOM} Product ID, timestamp and band.
 }
 \description{
 Fetch  \acronym{BOM} satellite GeoTIFF imagery from
 \url{ftp://ftp.bom.gov.au/anon/gen/gms/} and return a raster
-\code{\link[raster]{stack}} object of 'GeoTIFF' files. Files are available at
+\code{\link[terra]{SpatRaster}} object of 'GeoTIFF' files. Files are available at
 ten minute update frequency with a 24 hour delete time. Suggested to check
 file availability first by using \code{\link{get_available_imagery}}.
 }
@@ -43,29 +43,29 @@ Valid \acronym{BOM} satellite Product IDs for use with
 \item{IDE00422}{AHI VIS (Ch3) greyscale 2km FD GEOS GIS}
 \item{IDE00423}{AHI IR (Ch13) Zehr 2km FD GEOS GIS}
 \item{IDE00425}{AHI VIS (true colour) / IR (Ch13 greyscale) composite 1km FD
- GEOS GIS}
+GEOS GIS}
 \item{IDE00426}{AHI VIS (true colour) / IR (Ch13 greyscale) composite 2km FD
- GEOS GIS}
+GEOS GIS}
 \item{IDE00427}{AHI WV (Ch8) 2km FD GEOS GIS}
 \item{IDE00430}{AHI cloud cover only 2km AUS equirect. GIS}
 \item{IDE00431}{AHI IR (Ch13) greyscale 2km AUS equirect. GIS}
 \item{IDE00432}{AHI VIS (Ch3) greyscale 2km AUS equirect. GIS}
 \item{IDE00433}{AHI IR (Ch13) Zehr 2km AUS equirect. GIS}
 \item{IDE00435}{AHI VIS (true colour) / IR (Ch13 greyscale) composite 1km AUS
- equirect. GIS}
+equirect. GIS}
 \item{IDE00436}{AHI VIS (true colour) / IR (Ch13 greyscale) composite 2km AUS
- equirect. GIS}
+equirect. GIS}
 \item{IDE00437}{AHI WV (Ch8) 2km AUS equirect. GIS}
 \item{IDE00439}{AHI VIS (Ch3) greyscale 0.5km AUS equirect. GIS}
 }
 
-We cache using \pkg{hoardr}, find your cache folder by executing
+We cache using \CRANpkg{hoardr}, find your cache folder by executing
 \code{manage_cache$cache_path_get}.
 }
 \examples{
 \donttest{
 # Fetch AHI VIS (true colour) / IR (Ch13 greyscale) composite 1km FD
-# GEOS GIS raster stack for most recent single scan available
+# GEOS GIS \code{SpatRaster} object for most recent single scan available
 
 imagery <- get_satellite_imagery(product_id = "IDE00425", scans = 1)
 

@@ -9,3 +9,6 @@ inst/doc
 *.code-workspace
 doc
 Meta
+docs/
+
+revdep/

@@ -1,6 +1,10 @@
 Create BOM Marine Zones Database
 ================
 
+<STYLE type='text/css' scoped>
+PRE.fansi SPAN {padding-top: .25em; padding-bottom: .25em};
+</STYLE>
+
 ## Get BOM Forecast Marine Zones
 
 BOM maintains a shapefile of forecast marine zone names and their
@@ -20,39 +24,74 @@ curl::curl_download(
   quiet = TRUE
 )
 
-marine_AAC_codes <-
+new_marine_AAC_codes <-
   foreign::read.dbf(paste0(tempdir(), "marine_AAC_codes.dbf"), as.is = TRUE)
 
 # convert names to lower case for consistency with bomrang output
-names(marine_AAC_codes) <- tolower(names(marine_AAC_codes))
+names(new_marine_AAC_codes) <- tolower(names(new_marine_AAC_codes))
 
 # reorder columns
-marine_AAC_codes <- marine_AAC_codes[, c(1, 3, 4, 5, 6, 7)]
+new_marine_AAC_codes <- new_marine_AAC_codes[, c(1, 3, 4, 5, 6, 7)]
 
-data.table::setDT(marine_AAC_codes)
-data.table::setkey(marine_AAC_codes, "aac")
-
-str(marine_AAC_codes)
+data.table::setDT(new_marine_AAC_codes)
+data.table::setkey(new_marine_AAC_codes, "aac")
 ```
 
-    ## Classes 'data.table' and 'data.frame':   81 obs. of  6 variables:
-    ##  $ aac       : chr  "NSW_MW001" "NSW_MW002" "NSW_MW003" "NSW_MW004" ...
-    ##  $ dist_name : chr  "Eden" "Batemans" "Illawarra" "Sydney" ...
-    ##  $ state_code: chr  "NSW" "NSW" "NSW" "NSW" ...
-    ##  $ type      : chr  "Coastal" "Coastal" "Coastal" "Coastal" ...
-    ##  $ pt_1_name : chr  "Montague Island" "Ulladulla" "Port Hacking" "Broken Bay" ...
-    ##  $ pt_2_name : chr  "Gabo Island" "Montague Island" "Ulladulla" "Port Hacking" ...
-    ##  - attr(*, ".internal.selfref")=<externalptr> 
-    ##  - attr(*, "sorted")= chr "aac"
+## Show Changes from Last Release
 
-Save the marine zones to disk for use in bomrang.
+To ensure that the data being compared is from the most recent release,
+reinstall bomrang from CRAN.
+
+``` r
+install.packages("bomrang", repos = "http://cran.us.r-project.org")
+```
+
+    ## Installing package into '/Users/adamsparks/Library/R/4.0/library'
+    ## (as 'lib' is unspecified)
+
+    ## 
+    ## The downloaded binary packages are in
+    ##  /var/folders/hc/tft3s5bn48gb81cs99mycyf00000gn/T//RtmpBQrqEq/downloaded_packages
+
+``` r
+load(system.file("extdata", "marine_AAC_codes.rda", package = "bomrang"))
+
+(
+  marine_AAC_code_changes <-
+    diffobj::diffPrint(new_marine_AAC_codes, marine_AAC_codes)
+)
+```
+
+<PRE class="fansi fansi-output"><CODE>## <span style='color: #BBBB00;'>&lt;</span><span> </span><span style='color: #BBBB00;'>new_marine_AAC_codes</span><span>                                                 
+## </span><span style='color: #0000BB;'>&gt;</span><span> </span><span style='color: #0000BB;'>marine_AAC_codes</span><span>                                                     
+## </span><span style='color: #00BBBB;'>@@ 8,5 / 8,5 @@                                                        </span><span>
+## </span><span style='color: #555555;'>~           aac                           dist_name state_code     type</span><span>
+##   </span><span style='color: #555555;'> 7: </span><span>NSW_MW007                               Coffs        NSW  Coastal
+##   </span><span style='color: #555555;'> 8: </span><span>NSW_MW008                               Byron        NSW  Coastal
+## </span><span style='color: #BBBB00;'>&lt;</span><span> </span><span style='color: #555555;'> 9: </span><span>NSW_MW009              Sydney </span><span style='color: #BBBB00;'>Enclosed</span><span> Waters        NSW    Local
+## </span><span style='color: #0000BB;'>&gt;</span><span> </span><span style='color: #555555;'> 9: </span><span>NSW_MW009                Sydney </span><span style='color: #0000BB;'>Closed</span><span> Waters        NSW    Local
+##   </span><span style='color: #555555;'>10: </span><span> NT_MW001              Beagle Bonaparte Coast         NT  Coastal
+##   </span><span style='color: #555555;'>11: </span><span> NT_MW002                    North Tiwi Coast         NT  Coastal
+</span></CODE></PRE>
+
+# Save Marine Locations Data and Changes
+
+Save the marine zones’ metadata and changes to disk for use in
+*bomrang*.
 
 ``` r
 if (!dir.exists("../inst/extdata")) {
   dir.create("../inst/extdata", recursive = TRUE)
 }
 
-save(marine_AAC_codes, file = "../inst/extdata/marine_AAC_codes.rda",
+marine_AAC_codes <- new_marine_AAC_codes
+
+save(marine_AAC_codes,
+     file = "../inst/extdata/marine_AAC_codes.rda",
+     compress = "bzip2")
+
+save(marine_AAC_code_changes,
+     file = "../inst/extdata/marine_AAC_code_changes.rda",
      compress = "bzip2")
 ```
 
@@ -64,39 +103,40 @@ sessioninfo::session_info()
 
     ## ─ Session info ───────────────────────────────────────────────────────────────
     ##  setting  value                       
-    ##  version  R version 4.0.3 (2020-10-10)
-    ##  os       macOS Catalina 10.15.7      
+    ##  version  R version 4.0.4 (2021-02-15)
+    ##  os       macOS Big Sur 10.16         
     ##  system   x86_64, darwin17.0          
     ##  ui       X11                         
     ##  language (EN)                        
     ##  collate  en_AU.UTF-8                 
     ##  ctype    en_AU.UTF-8                 
-    ##  tz       Australia/Brisbane          
-    ##  date     2020-12-01                  
+    ##  tz       Australia/Perth             
+    ##  date     2021-03-26                  
     ## 
     ## ─ Packages ───────────────────────────────────────────────────────────────────
-    ##  package     * version    date       lib source                       
-    ##  assertthat    0.2.1      2019-03-21 [1] CRAN (R 4.0.3)               
-    ##  cli           2.2.0      2020-11-20 [1] CRAN (R 4.0.3)               
-    ##  crayon        1.3.4.9000 2020-11-15 [1] Github (r-lib/crayon@4bceba8)
-    ##  curl          4.3        2019-12-02 [1] CRAN (R 4.0.3)               
-    ##  data.table    1.13.3     2020-11-06 [1] local                        
-    ##  digest        0.6.27     2020-10-24 [1] CRAN (R 4.0.2)               
-    ##  evaluate      0.14       2019-05-28 [1] CRAN (R 4.0.3)               
-    ##  fansi         0.4.1      2020-01-08 [1] CRAN (R 4.0.3)               
-    ##  foreign       0.8-80     2020-05-24 [2] CRAN (R 4.0.3)               
-    ##  glue          1.4.2      2020-08-27 [1] CRAN (R 4.0.2)               
-    ##  htmltools     0.5.0      2020-06-16 [1] CRAN (R 4.0.2)               
-    ##  knitr         1.30       2020-09-22 [1] CRAN (R 4.0.2)               
-    ##  magrittr      2.0.1      2020-11-17 [1] CRAN (R 4.0.3)               
-    ##  rlang         0.4.9      2020-11-26 [1] CRAN (R 4.0.3)               
-    ##  rmarkdown     2.5        2020-10-21 [1] CRAN (R 4.0.3)               
-    ##  sessioninfo   1.1.1      2018-11-05 [1] CRAN (R 4.0.2)               
-    ##  stringi       1.5.3      2020-09-09 [1] CRAN (R 4.0.2)               
-    ##  stringr       1.4.0      2019-02-10 [1] CRAN (R 4.0.3)               
-    ##  withr         2.3.0      2020-09-22 [1] CRAN (R 4.0.2)               
-    ##  xfun          0.19       2020-10-30 [1] CRAN (R 4.0.2)               
-    ##  yaml          2.2.1      2020-02-01 [1] CRAN (R 4.0.3)               
+    ##  package     * version date       lib source                            
+    ##  assertthat    0.2.1   2019-03-21 [1] CRAN (R 4.0.2)                    
+    ##  cli           2.3.1   2021-02-23 [1] CRAN (R 4.0.4)                    
+    ##  crayon        1.4.1   2021-02-08 [1] CRAN (R 4.0.2)                    
+    ##  curl          4.3     2019-12-02 [1] CRAN (R 4.0.1)                    
+    ##  data.table    1.14.0  2021-02-21 [1] CRAN (R 4.0.4)                    
+    ##  diffobj       0.3.4   2021-03-22 [1] CRAN (R 4.0.4)                    
+    ##  digest        0.6.27  2020-10-24 [1] CRAN (R 4.0.2)                    
+    ##  evaluate      0.14    2019-05-28 [1] CRAN (R 4.0.1)                    
+    ##  fansi         0.4.2   2021-01-15 [1] CRAN (R 4.0.2)                    
+    ##  foreign       0.8-81  2020-12-22 [2] CRAN (R 4.0.4)                    
+    ##  glue          1.4.2   2020-08-27 [1] CRAN (R 4.0.2)                    
+    ##  htmltools     0.5.1.1 2021-01-22 [1] CRAN (R 4.0.2)                    
+    ##  knitr         1.31    2021-01-27 [1] CRAN (R 4.0.2)                    
+    ##  magrittr      2.0.1   2020-11-17 [1] CRAN (R 4.0.2)                    
+    ##  rlang         0.4.10  2020-12-30 [1] CRAN (R 4.0.2)                    
+    ##  rmarkdown     2.7.3   2021-03-15 [1] Github (rstudio/rmarkdown@61db7a9)
+    ##  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 4.0.2)                    
+    ##  stringi       1.5.3   2020-09-09 [1] CRAN (R 4.0.2)                    
+    ##  stringr       1.4.0   2019-02-10 [1] CRAN (R 4.0.2)                    
+    ##  withr         2.4.1   2021-01-26 [1] CRAN (R 4.0.2)                    
+    ##  xfun          0.22    2021-03-11 [1] CRAN (R 4.0.4)                    
+    ##  yaml          2.2.1   2020-02-01 [1] CRAN (R 4.0.2)                    
     ## 
     ## [1] /Users/adamsparks/Library/R/4.0/library
     ## [2] /Library/Frameworks/R.framework/Versions/4.0/Resources/library
